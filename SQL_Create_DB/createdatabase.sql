@@ -1,0 +1,206 @@
+USE [master]
+GO
+/****** Object:  Database [worthington]    Script Date: 10/20/2013 10:26:31 PM ******/
+CREATE DATABASE [worthington]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'worthington', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\worthington.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'worthington_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\worthington_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+ALTER DATABASE [worthington] SET COMPATIBILITY_LEVEL = 110
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [worthington].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [worthington] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [worthington] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [worthington] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [worthington] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [worthington] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [worthington] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [worthington] SET AUTO_CREATE_STATISTICS ON 
+GO
+ALTER DATABASE [worthington] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [worthington] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [worthington] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [worthington] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [worthington] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [worthington] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [worthington] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [worthington] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [worthington] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [worthington] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [worthington] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [worthington] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [worthington] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [worthington] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [worthington] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [worthington] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [worthington] SET RECOVERY FULL 
+GO
+ALTER DATABASE [worthington] SET  MULTI_USER 
+GO
+ALTER DATABASE [worthington] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [worthington] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [worthington] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [worthington] SET TARGET_RECOVERY_TIME = 0 SECONDS 
+GO
+USE [worthington]
+GO
+/****** Object:  Table [dbo].[Book]    Script Date: 10/20/2013 10:26:31 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Book](
+	[BookID] [int] IDENTITY(1,1) NOT NULL,
+	[number] [int] NULL,
+	[title] [varchar](50) NULL,
+ CONSTRAINT [PK_Book] PRIMARY KEY CLUSTERED 
+(
+	[BookID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Item]    Script Date: 10/20/2013 10:26:31 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Item](
+	[ItemID] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NULL,
+	[type] [int] NULL,
+	[firstMentionBook] [int] NULL,
+	[firstMentionChapter] [int] NULL,
+	[eventDate] [int] NULL,
+	[ItemDescID] [int] NULL,
+	[ItemInvID] [int] NULL,
+ CONSTRAINT [PK_Item] PRIMARY KEY CLUSTERED 
+(
+	[ItemID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ItemDescription]    Script Date: 10/20/2013 10:26:31 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ItemDescription](
+	[ItemDescID] [int] IDENTITY(1,1) NOT NULL,
+	[ItemID] [int] NULL,
+	[bookNumber] [int] NULL,
+	[description] [varchar](250) NULL,
+ CONSTRAINT [PK_ItemDescription] PRIMARY KEY CLUSTERED 
+(
+	[ItemDescID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ItemInventory]    Script Date: 10/20/2013 10:26:31 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ItemInventory](
+	[ItemInvID] [int] IDENTITY(1,1) NOT NULL,
+	[ItemID] [int] NULL,
+ CONSTRAINT [PK_ItemInventory] PRIMARY KEY CLUSTERED 
+(
+	[ItemInvID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[ItemType]    Script Date: 10/20/2013 10:26:31 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ItemType](
+	[ItemTypeID] [int] IDENTITY(1,1) NOT NULL,
+	[ItemType] [int] NULL,
+ CONSTRAINT [PK_ItemType] PRIMARY KEY CLUSTERED 
+(
+	[ItemTypeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[SpoilerFilter]    Script Date: 10/20/2013 10:26:31 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SpoilerFilter](
+	[SpoilerFilterID] [int] IDENTITY(1,1) NOT NULL,
+	[latestRead] [int] NULL,
+ CONSTRAINT [PK_SpoilerFilter] PRIMARY KEY CLUSTERED 
+(
+	[SpoilerFilterID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+ALTER TABLE [dbo].[Item]  WITH CHECK ADD  CONSTRAINT [FK_Item_ItemInventory] FOREIGN KEY([ItemInvID])
+REFERENCES [dbo].[ItemInventory] ([ItemInvID])
+GO
+ALTER TABLE [dbo].[Item] CHECK CONSTRAINT [FK_Item_ItemInventory]
+GO
+ALTER TABLE [dbo].[ItemDescription]  WITH CHECK ADD  CONSTRAINT [FK_ItemDescription_Item] FOREIGN KEY([ItemID])
+REFERENCES [dbo].[Item] ([ItemID])
+GO
+ALTER TABLE [dbo].[ItemDescription] CHECK CONSTRAINT [FK_ItemDescription_Item]
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'make sure each item is in the inventory' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Item', @level2type=N'CONSTRAINT',@level2name=N'FK_Item_ItemInventory'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'make sure each item description has an item' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'ItemDescription', @level2type=N'CONSTRAINT',@level2name=N'FK_ItemDescription_Item'
+GO
+USE [master]
+GO
+ALTER DATABASE [worthington] SET  READ_WRITE 
+GO
