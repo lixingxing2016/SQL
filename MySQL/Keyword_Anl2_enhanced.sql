@@ -1,3 +1,4 @@
+
 /*
 Keyword	"# of searches
 * Count 'Hit' + ""Not Found'"	Series Code	# of Link by Series Code	# of CodeFix by Series Code	# of unique tab clicks for "4"
@@ -9,7 +10,7 @@ SELECT *#, COUNT(t.Max_CodeFix_Count) AS Total_CodeFix_Count, COUNT(t.Tab_name_c
 
 FROM (
 
-SELECT  
+SELECT
 	s.AccessDateTime
 	,s.SessionId
 	,s.Keyword
@@ -32,15 +33,15 @@ FROM search s
 
 # Removed Series code from Group By to get correct by sessionId, same thing in the botton Group By as well
 # Similary removing the Session ID will add up everything in give Keyword based Analysis
-# Example of Result - fep	429b8c6e35e835539dd232ef966fe811	21	0	4		
+# Example of Result - fep	429b8c6e35e835539dd232ef966fe811	21	0	4
 LEFT JOIN (
 	SELECT DISTINCT SessionId, Keyword, Series_Code
-			,(SUM(IF(Status = 'Hit',1,0)) + SUM(IF(Status = 'NotFound',1,0))) AS total_searches	
+			,(SUM(IF(Status = 'Hit',1,0)) + SUM(IF(Status = 'NotFound',1,0))) AS total_searches
 			, SUM(IF(Status = 'Link',1,0)) AS sum_Link
 			, Status
-	FROM search 
+	FROM search
 	GROUP BY Keyword#, Series_Code, SessionId
-) AS s1 ON s1.SessionId = s.SessionId AND s1.Keyword = s.Keyword AND s1.Series_Code = s.Series_Code 
+) AS s1 ON s1.SessionId = s.SessionId AND s1.Keyword = s.Keyword AND s1.Series_Code = s.Series_Code
 
 LEFT JOIN(
 	SELECT DISTINCT AccessDateTime, SessionId, Series_Code, Referer_URL, Product_Code
@@ -55,12 +56,12 @@ LEFT JOIN (
 			,Tab_Name, Series_Code
 		   ,COUNT(DISTINCT Tab_Name) AS Tab_name_count
 	FROM detail_tab
-	WHERE Tab_Name = '4' 
+	WHERE Tab_Name = '4'
 	GROUP BY SessionId, Series_Code, Tab_Name
-) AS d ON s.SessionId = d.SessionId AND s.Series_Code = d.Series_Code 
-																						 
-#WHERE s.Keyword = 'CLBU8-11-10' #and s.SessionId in ('d3989cf8ef244653efac851f9b9cdb9e') 
-GROUP BY s.Keyword, s.Series_Code, s.URL#, c.Product_Code#, s.SessionId#, s.Series_Code 
+) AS d ON s.SessionId = d.SessionId AND s.Series_Code = d.Series_Code
+
+#WHERE s.Keyword = 'CLBU8-11-10' #and s.SessionId in ('d3989cf8ef244653efac851f9b9cdb9e')
+GROUP BY s.Keyword, s.Series_Code, s.URL#, c.Product_Code#, s.SessionId#, s.Series_Code
 ORDER BY total_searches DESC
 
 )AS t
