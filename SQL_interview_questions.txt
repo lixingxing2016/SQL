@@ -1,4 +1,5 @@
 
+
 1) What is the difference between inner and outer join? Explain with example.
 
 	- Inner join returns rows when there is at least one match in both tables
