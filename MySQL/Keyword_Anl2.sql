@@ -26,7 +26,7 @@ LEFT JOIN (
 ) AS s1 ON s1.Keyword = s.Keyword
 
 
-LEFT JOIN (
+LEFT OUTER JOIN (
 
 	SELECT 	SessionId, Page_URL
 			,Tab_Name, Series_Code
@@ -38,7 +38,7 @@ LEFT JOIN (
 ) AS d ON s.SessionId = d.SessionId AND s.Series_Code = d.Series_Code
 
 
-LEFT JOIN(
+LEFT OUTER JOIN(
 	SELECT DISTINCT AccessDateTime, SessionId, Series_Code, Referer_URL, Product_Code
 			, COUNT(Product_Code) AS CodeFix_count
 	FROM code_fix
